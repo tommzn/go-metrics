@@ -1,7 +1,7 @@
 
 aws:
   timestream:
-    awsregion: eu-west-5
+    region: eu-west-5
     database: timestream-db
     table: data
     batch_size: 10

@@ -24,7 +24,7 @@ func NewTimestreamPublisher(conf config.Config, logger log.Logger) Publisher {
 	database := conf.Get("aws.timestream.database", nil)
 	table := conf.Get("aws.timestream.table", nil)
 	awsConfig := &aws.Config{
-		Region: conf.Get("aws.timestream.awsregion", config.AsStringPtr("eu-central-1")),
+		Region: conf.Get("aws.timestream.region", config.AsStringPtr("eu-central-1")),
 	}
 	return &TimestreamPublisher{
 		logger:       logger,
