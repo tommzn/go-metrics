@@ -65,5 +65,5 @@ aws:
     batch_size: 10
 ```
 
-## Credentials
+## AWS Credentials
 Credentials for AWS access have to be setup separately as described in [AWS SDK Docs](https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials).
