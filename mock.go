@@ -20,7 +20,7 @@ func newTimestreamMock(shouldReturnWithError bool) timestreamClient {
 
 func (mock *timestreamMock) WriteRecords(input *timestreamwrite.WriteRecordsInput) (*timestreamwrite.WriteRecordsOutput, error) {
 	if mock.shouldReturnWithError {
-		return nil, errors.New("An errors has occured!")
+		return nil, errors.New("An errors has occurred!")
 	}
 	for _, record := range input.Records {
 		mock.records = append(mock.records, record)

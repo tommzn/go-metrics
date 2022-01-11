@@ -67,7 +67,7 @@ func (publisher *TimestreamPublisher) batchSizeReached() bool {
 		len(publisher.measurements) >= *publisher.batchSize
 }
 
-// SendMeasurements delivers measurements to AWS Timestream. Occuring errors will be colleted and can be accessed by Error method.
+// SendMeasurements delivers measurements to AWS Timestream. Occurring errors will be colleted and can be accessed by Error method.
 func (publisher *TimestreamPublisher) sendMeasurements() {
 
 	if len(publisher.measurements) > 0 {
