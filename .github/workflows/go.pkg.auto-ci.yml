@@ -3,32 +3,16 @@ on:
   push:
     branches:
       - main
-jobs:
-  test:
-    name: Go Tests
-    strategy:
-      matrix:
-        platform: [ubuntu-latest]
-    runs-on: ${{ matrix.platform }}
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Get Go version
-        run: echo "goversion=`egrep -i '^go [1-2][.][0-9]+$' go.mod | sed 's/go //' | sed 's/$/.x/'`" >> $GITHUB_ENV
-      - name: Install Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: ${{ env.goversion }}
-      - name: Run tests
-        run: go test -v  -covermode=count ./...
+      - 'features/**'
+      - 'dependabot/**'
+  pull_request:
+    branches:
+      - 'features/**'
+      - 'dependabot/**'
 
-  release:
-    name: Go Package Release
-    needs: [test]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - uses: go-semantic-release/action@v1
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+permissions:
+  contents: write
+
+jobs:
+  go-auto-ci:
+    uses:  tommzn/github-ci/.github/workflows/go.pkg.auto-ci.yml@v1.0.100

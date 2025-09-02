@@ -1,25 +1,28 @@
 package metrics
 
 import (
-	"github.com/aws/aws-sdk-go/service/timestreamwrite"
+	"context"
+
+	"github.com/aws/aws-sdk-go-v2/service/timestreamwrite"
 )
 
-// Publisher is used to import metrics to different timesteam databases.
+// Publisher is used to import metrics to different Timestream databases.
 type Publisher interface {
 
-	// Send will import a single measurement to a timesteam database. Metrics will maybe be send in batches. Use Flush to force import.
+	// Send will import a single measurement to a Timestream database.
+	// Metrics may be sent in batches. Use Flush to force import.
 	Send(Measurement)
 
 	// Flush will start importing remaining metrics.
 	Flush()
 
-	// Error returns errors from latest pulishing.
+	// Error returns errors from the latest publishing.
 	Error() error
 }
 
-// TimestreamClient is an interface to write records to timesteam database.
+// timestreamClient is an interface to write records to Timestream database.
 type timestreamClient interface {
 
-	// WriteRecords will import metrics to timestream database
-	WriteRecords(input *timestreamwrite.WriteRecordsInput) (*timestreamwrite.WriteRecordsOutput, error)
+	// WriteRecords will import metrics to Timestream database.
+	WriteRecords(ctx context.Context, input *timestreamwrite.WriteRecordsInput, optFns ...func(*timestreamwrite.Options)) (*timestreamwrite.WriteRecordsOutput, error)
 }
