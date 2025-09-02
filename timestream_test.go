@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/suite"
-	config "github.com/tommzn/go-config"
+	"github.com/tommzn/go-config"
 )
 
 type TimestreamTestSuite struct {
@@ -52,13 +52,13 @@ func (suite *TimestreamTestSuite) TestIntegration() {
 
 	suite.SkipCI()
 
-	publisher := NewTimestreamPublisher(loadConfigForTest(config.AsStringPtr("fixtures/testconfig01.yml")), nil)
+	publisher := NewTimestreamPublisher(loadConfigForTest(config.AsStringPtr("fixtures/testconfig.yml")), nil)
 	timestreamPublisher, ok := publisher.(*TimestreamPublisher)
 	suite.True(ok)
 
 	measurement := measurementForTest()
 	publisher.Send(measurement)
-	suite.Len(timestreamPublisher.measurements, 0)
+	suite.Len(timestreamPublisher.measurements, 1)
 	suite.Nil(timestreamPublisher.Error())
 }
 
