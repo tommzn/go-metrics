@@ -7,7 +7,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.32.25
 	github.com/aws/aws-sdk-go-v2/service/timestreamwrite v1.35.1
 	github.com/stretchr/testify v1.11.1
-	github.com/tommzn/go-config v1.4.1
+	github.com/tommzn/go-config v1.4.2
 	github.com/tommzn/go-log v1.2.8
 	github.com/tommzn/go-utils v1.0.8
 )
