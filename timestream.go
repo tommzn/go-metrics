@@ -123,29 +123,42 @@ func (publisher *TimestreamPublisher) toTimeStreamRecord(measurement Measurement
 	return records
 }
 
-// toTimeStreamDimensions converts passed measurement tag to a Timestream dimension.
+// toTimeStreamDimensions converts passed measurement tags to Timestream dimensions.
 func (publisher *TimestreamPublisher) toTimeStreamDimensions(tags []MeasurementTag) []types.Dimension {
-	dimensions := []types.Dimension{}
+	dimensions := make([]types.Dimension, 0, len(tags))
 	for _, tag := range tags {
-		dimensions = append(dimensions,
-			types.Dimension{
-				Name:  aws.String(tag.Name),
-				Value: aws.String(tag.Value),
-			},
-		)
+		dimensions = append(dimensions, types.Dimension{
+			Name:  aws.String(tag.Name),
+			Value: aws.String(tag.Value),
+		})
 	}
 	return dimensions
 }
 
-// formatMeasurementValue will format passed value depending on its type and return a corresponding Timestream measurement type.
+// formatMeasurementValue formats the passed value depending on its type and
+// returns a corresponding Timestream measurement type. Integer, unsigned and
+// floating-point values are mapped to Double; everything else is stringified
+// with fmt.Sprint (safe for arbitrary types, including nil).
 func (publisher *TimestreamPublisher) formatMeasurementValue(value MeasurementValue) (string, types.MeasureValueType) {
 	switch v := value.Value.(type) {
-	case int, int32, int64, uint32, uint64:
-		return fmt.Sprintf("%d", v), types.MeasureValueTypeDouble
-	case float32, float64:
-		return fmt.Sprintf("%f", v), types.MeasureValueTypeDouble
+	case int:
+		return strconv.FormatInt(int64(v), 10), types.MeasureValueTypeDouble
+	case int32:
+		return strconv.FormatInt(int64(v), 10), types.MeasureValueTypeDouble
+	case int64:
+		return strconv.FormatInt(v, 10), types.MeasureValueTypeDouble
+	case uint32:
+		return strconv.FormatUint(uint64(v), 10), types.MeasureValueTypeDouble
+	case uint64:
+		return strconv.FormatUint(v, 10), types.MeasureValueTypeDouble
+	case float32:
+		// Preserve the previous fmt.Sprintf("%f", ...) formatting (6 decimals).
+		return strconv.FormatFloat(float64(v), 'f', 6, 32), types.MeasureValueTypeDouble
+	case float64:
+		// Preserve the previous fmt.Sprintf("%f", ...) formatting (6 decimals).
+		return strconv.FormatFloat(v, 'f', 6, 64), types.MeasureValueTypeDouble
 	default:
-		return fmt.Sprintf("%s", v), types.MeasureValueTypeVarchar
+		return fmt.Sprint(v), types.MeasureValueTypeVarchar
 	}
 }
 

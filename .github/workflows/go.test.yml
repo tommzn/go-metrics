@@ -1,0 +1,12 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches:
+      - 'deps/**'
+      - 'fix/**'
+
+jobs:
+  test:
+    uses: tommzn/github-ci/.github/workflows/go.test.v2.yml@v1.0.104
