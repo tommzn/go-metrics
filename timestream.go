@@ -27,10 +27,13 @@ func NewTimestreamPublisher(conf config.Config, logger log.Logger) Publisher {
 	table := conf.Get("aws.timestream.table", nil)
 
 	awsRegion := conf.Get("aws.region", config.AsStringPtr("eu-central-1"))
-	awsCfg, _ := awsconfig.LoadDefaultConfig(
-		context.TODO(),
+	awsCfg, err := awsconfig.LoadDefaultConfig(
+		context.Background(),
 		awsconfig.WithRegion(*awsRegion),
 	)
+	if err != nil {
+		logger.Errorf("failed to load AWS config: %s", err)
+	}
 
 	return &TimestreamPublisher{
 		logger:       logger,
