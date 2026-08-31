@@ -28,7 +28,7 @@ func NewTimestreamPublisher(conf config.Config, logger log.Logger) Publisher {
 
 	awsRegion := conf.Get("aws.region", config.AsStringPtr("eu-central-1"))
 	awsCfg, _ := awsconfig.LoadDefaultConfig(
-		context.TODO(),
+		context.Background(),
 		awsconfig.WithRegion(*awsRegion),
 	)
 
